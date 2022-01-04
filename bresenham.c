@@ -33,6 +33,7 @@ void	prep_axe(t_coor *coor, t_bre *bre)
 	else if (bre->width > 0)
 		bre->dx2 = 1;
 }
+
 void	correct_axe(t_bre *bre)
 {
 	bre->longest = abs(bre->width);
@@ -56,7 +57,7 @@ void	bresenham_new(t_info *info, t_coor *coor)
 
 	i = 0;
 	prep_axe(coor, &bre);
-	correct_axe(&bre);bre->
+	correct_axe(&bre);
 	bre.numerator = bre.longest / 2;
 	while (i <= bre.longest)
 	{
@@ -76,61 +77,3 @@ void	bresenham_new(t_info *info, t_coor *coor)
 		i++;
 	}
 }
-
-
-// void	bresenham_new(t_info *info, t_coor *coor)
-// {
-// 	int width = coor->x1 - coor->xold;
-// 	int height = coor->y1 - coor->yold;
-
-// 	int dx1 = 0;
-// 	int dy1 = 0;
-// 	int dx2 = 0;
-// 	int dy2 = 0;
-
-// 	if (width < 0)
-// 		dx1 = -1;
-// 	else if (width > 0)
-// 		dx1 = 1;
-// 	if (height < 0)
-// 		dy1 = -1;
-// 	else if (height > 0)
-// 		dy1 = 1;
-// 	if (width < 0)
-// 		dx2 = -1;
-// 	else if (width > 0)
-// 		dx2 = 1;
-
-// 	int longest = abs(width);
-// 	int shortest = abs(height);
-// 	if (!(longest > shortest))
-// 	{
-// 		longest = abs(height);
-// 		shortest = abs(width);
-// 		if (height < 0)
-// 			dy2 = -1;
-// 		else if (height > 0)
-// 			dy2 = 1;
-// 		dx2 = 0 ;
-// 	}
-
-// 	int numerator = longest / 2;
-// 	int i = 0;
-// 	while (i <= longest)
-// 	{
-// 		img_pix_put(info, &info->img, coor->xold, coor->yold);
-// 		numerator += shortest ;
-// 		if (!(numerator < longest))
-// 		{
-// 			numerator -= longest;
-// 			coor->xold += dx1;
-// 			coor->yold += dy1;
-// 		}
-// 		else
-// 		{
-// 			coor->xold += dx2;
-// 			coor->yold += dy2;
-// 		}
-// 		i++;
-// 	}
-// }
