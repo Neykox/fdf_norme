@@ -10,115 +10,127 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf4.h"
+#include "fdf.h"
 
-// public void line(int x,int y,int x2, int y2, int color) {
-//     int w = x2 - x ;
-//     int h = y2 - y ;
-//     int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0 ;
-//     if (w<0) dx1 = -1 ; else if (w>0) dx1 = 1 ;
-//     if (h<0) dy1 = -1 ; else if (h>0) dy1 = 1 ;
-//     if (w<0) dx2 = -1 ; else if (w>0) dx2 = 1 ;
-//     int longest = Math.abs(w) ;
-//     int shortest = Math.abs(h) ;
-//     if (!(longest>shortest)) {
-//         longest = Math.abs(h) ;
-//         shortest = Math.abs(w) ;
-//         if (h<0) dy2 = -1 ; else if (h>0) dy2 = 1 ;
-//         dx2 = 0 ;            
-//     }
-//     int numerator = longest >> 1 ;
-//     for (int i=0;i<=longest;i++) {
-//         putpixel(x,y,color) ;
-//         numerator += shortest ;
-//         if (!(numerator<longest)) {
-//             numerator -= longest ;
-//             x += dx1 ;
-//             y += dy1 ;
-//         } else {
-//             x += dx2 ;
-//             y += dy2 ;
-//         }
-//     }
-// }
+void	prep_axe(t_coor *coor, t_bre *bre)
+{
+	bre->width = coor->x1 - coor->xold;
+	bre->height = coor->y1 - coor->yold;
+	bre->dx1 = 0;
+	bre->dy1 = 0;
+	bre->dx2 = 0;
+	bre->dy2 = 0;
+	if (bre->width < 0)
+		bre->dx1 = -1;
+	else if (bre->width > 0)
+		bre->dx1 = 1;
+	if (bre->height < 0)
+		bre->dy1 = -1;
+	else if (bre->height > 0)
+		bre->dy1 = 1;
+	if (bre->width < 0)
+		bre->dx2 = -1;
+	else if (bre->width > 0)
+		bre->dx2 = 1;
+}
+void	correct_axe(t_bre *bre)
+{
+	bre->longest = abs(bre->width);
+	bre->shortest = abs(bre->height);
+	if (!(bre->longest > bre->shortest))
+	{
+		bre->longest = abs(bre->height);
+		bre->shortest = abs(bre->width);
+		if (bre->height < 0)
+			bre->dy2 = -1;
+		else if (bre->height > 0)
+			bre->dy2 = 1;
+		bre->dx2 = 0 ;
+	}
+}
 
 void	bresenham_new(t_info *info, t_coor *coor)
 {
-	int width = coor->x1 - coor->xold;
-	int height = coor->y1 - coor->yold;
+	t_bre	bre;
+	int		i;
 
-	int dx1 = 0;
-	int dy1 = 0;
-	int dx2 = 0;
-	int dy2 = 0;
-	if (width < 0)
+	i = 0;
+	prep_axe(coor, &bre);
+	correct_axe(&bre);bre->
+	bre.numerator = bre.longest / 2;
+	while (i <= bre.longest)
 	{
-		dx1 = -1;
-	}
-	else if (width > 0)
-	{
-		dx1 = 1;
-	}
-	if (height < 0)
-	{
-		dy1 = -1;
-	}
-	else if (height > 0)
-	{
-		dy1 = 1;
-	}
-	if (width < 0)
-	{
-		dx2 = -1;
-	}
-	else if (width > 0)
-	{	
-		dx2 = 1;
-	}
-
-
-	int longest = abs(width);
-	int shortest = abs(height);
-	if (!(longest > shortest))
-	{
-		longest = abs(height);
-		shortest = abs(width);
-		if (height < 0)
-			dy2 = -1;
-		else if (height > 0)
-			dy2 = 1;
-		dx2 = 0 ;
-	}
-
-	int numerator = longest / 2;
-	int i = 0;
-	// if (coor->z1 != 0 || coor->zold != 0)
-	// 	{
-	// 		printf("\033[0;32mx1 = %d, y1 = %d, z1 = %d\n", coor->x1, coor->y1, coor->z1);
-	// 		printf("xold = %d, yold = %d, zold = %d\n\033[0m", coor->xold, coor->yold, coor->zold);
-	// 	}
-	// 	else
-	// 	{
-	// 		printf("x1 = %d, y1 = %d, z1 = %d\n", coor->x1, coor->y1, coor->z1);
-	// 		printf("xold = %d, yold = %d, zold = %d\n", coor->xold, coor->yold, coor->zold);
-	// 	}
-	while (i <= longest)
-	{
-		img_pix_put(info, &info->img, coor->xold, coor->yold, coor->color);
-		numerator += shortest ;
-		if (!(numerator < longest))
+		img_pix_put(info, &info->img, coor->xold, coor->yold);
+		bre.numerator += bre.shortest ;
+		if (!(bre.numerator < bre.longest))
 		{
-			numerator -= longest;
-			coor->xold += dx1;
-			coor->yold += dy1;
+			bre->numerator -= bre.longest;
+			coor->xold += bre.dx1;
+			coor->yold += bre.dy1;
 		}
 		else
 		{
-			coor->xold += dx2;
-			coor->yold += dy2;
+			coor->xold += bre.dx2;
+			coor->yold += bre.dy2;
 		}
-		// if (coor->z1 != 0 || coor->zold != 0)
-		// 	coor->color += 2;
 		i++;
 	}
 }
+
+
+// void	bresenham_new(t_info *info, t_coor *coor)
+// {
+// 	int width = coor->x1 - coor->xold;
+// 	int height = coor->y1 - coor->yold;
+
+// 	int dx1 = 0;
+// 	int dy1 = 0;
+// 	int dx2 = 0;
+// 	int dy2 = 0;
+
+// 	if (width < 0)
+// 		dx1 = -1;
+// 	else if (width > 0)
+// 		dx1 = 1;
+// 	if (height < 0)
+// 		dy1 = -1;
+// 	else if (height > 0)
+// 		dy1 = 1;
+// 	if (width < 0)
+// 		dx2 = -1;
+// 	else if (width > 0)
+// 		dx2 = 1;
+
+// 	int longest = abs(width);
+// 	int shortest = abs(height);
+// 	if (!(longest > shortest))
+// 	{
+// 		longest = abs(height);
+// 		shortest = abs(width);
+// 		if (height < 0)
+// 			dy2 = -1;
+// 		else if (height > 0)
+// 			dy2 = 1;
+// 		dx2 = 0 ;
+// 	}
+
+// 	int numerator = longest / 2;
+// 	int i = 0;
+// 	while (i <= longest)
+// 	{
+// 		img_pix_put(info, &info->img, coor->xold, coor->yold);
+// 		numerator += shortest ;
+// 		if (!(numerator < longest))
+// 		{
+// 			numerator -= longest;
+// 			coor->xold += dx1;
+// 			coor->yold += dy1;
+// 		}
+// 		else
+// 		{
+// 			coor->xold += dx2;
+// 			coor->yold += dy2;
+// 		}
+// 		i++;
+// 	}
+// }

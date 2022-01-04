@@ -18,7 +18,7 @@
 # include <sys/types.h>
 # include <sys/uio.h>
 
-int		ft_strlen(char *str);
+size_t	ft_strlen(const char *s);
 
 char	*ft_strjoin_gnl(char *s1, char *s2, int i, int c);
 char	*ft_strdup_gnl(const char *s1);
